@@ -1,0 +1,127 @@
+<html>
+
+<head>
+    <title>Organizer!</title>
+    {% include "bootstrap.html" %}
+    {% load static %}
+    <script src="{%static 'common.js' %}"></script>
+    <link rel="stylesheet" href="{%static 'common.css' %}" />
+    <script src="{% static 'chartist.min.js' %}"></script>
+    <link rel="stylesheet" href="{%static 'chartist.min.css'%}" />
+    <style>
+        .ct-label {
+            color: blanchedalmond;
+        }
+    </style>
+
+</head>
+
+<body>
+    {% include "navbar.html" %}
+    <div style="color:floralwhite;">
+        
+        
+        <!--Get Tasks from server and put them in script-->
+        <div class="container">
+  <div class="row">
+    <div class="col">
+        <div class="jumbotron" style="background-color: darkslategrey;">
+        {% if not task_data %}
+        <p>No current Tasks to graph </p>
+        {% else %}
+        <h3>Tasks</h3>
+        <div id="graph1" class="ct-chart ct-minor-second"></div>
+        </div>
+
+        {% endif %}
+    </div>
+    <div class="col">
+        <div class="jumbotron" style="background-color: darkslategrey;">
+        {% if not budget_data %}
+        <p>No current Budgets to graph </p>
+        {% else %}
+        <h3>Budget</h3>
+        <div id="graph2" class="ct-chart ct-minor-second"></div>
+
+        {% endif %}
+        </div>
+    </div>
+</div>
+
+        <script>
+                {% if not task_data %}
+                ;
+                {% else %}
+                backend = [{% for row in task_data %}
+                "{{row.completed}}",
+                        {% endfor %}
+                ]
+                var trues = 0;
+                var falses = 0;
+                for(let i = 0; i < backend.length; i++){
+                    if(backend[i] == "True"){
+                        trues++;
+                    }
+                    if(backend[i] == "False"){
+                        falses++;
+                    }
+                }
+
+                graphArr = [trues, falses];
+
+            var data = {
+                labels: ['Complete', 'Incomplete'],
+                series: graphArr
+            };
+            console.log(data);
+
+            var sum = function (a, b) { return a + b };
+
+            new Chartist.Pie('#graph1', data);
+            {% endif %}
+            
+            //bar
+            {% if not budget_data %}
+                ;
+            {% else %}
+
+            var olabels = [{% for row in budget_data %}
+                '{{ row.description }}',
+                 {% endfor %}
+            ];
+console.log(olabels);
+
+            projected = [{% for row in budget_data %}
+                {{ row.projected }},
+                 {% endfor %}
+            ];
+console.log(projected);
+            actual = [{% for row in budget_data %}
+                {{ row.actual }},
+                 {% endfor %}
+            ];
+console.log(actual);
+            new Chartist.Bar('#graph2', {
+            labels: olabels,
+            series: [projected,actual]
+            }, {
+                 axisX: {
+                 // On the x-axis start means top and end means bottom
+                 position: 'start'
+                 },
+                 axisY: {
+                // On the y-axis start means left and end means right
+                position: 'end'
+                 }
+                });
+
+
+            {% endif %}
+        </script>
+
+
+        <div>
+</body>
+
+
+</html>

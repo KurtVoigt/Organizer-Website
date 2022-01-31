@@ -1,0 +1,27 @@
+<html>
+    <style>
+        h1{
+            text-align: center;
+          }
+    </style>
+    <head>
+        {% include "bootstrap.html" %}
+        {% load static %}
+        <title>History!</title>
+    </head>
+    <body>
+        {% include "navbar.html" %}
+        <h1>About</h1>
+        <img src="{%static 'pic.jpg' %}"/>
+        <div id="historyText">
+            <p>Hello, I'm Kurt Voigtritter I made this site as part of a web development course.</p>
+            <ol>
+                <li>The frontend is handled by bootstrap</li>
+                <li>The charts on the homepage are made using Chartist.js</li>
+                <li>The backend bj Django</li>
+                <li>I used Docker to take care of dependencies</li>
+                <li>I then deployed this to Google Cloud Platform</li>
+            </ol>
+        </div>
+    </body>
+</html>

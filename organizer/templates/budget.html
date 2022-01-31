@@ -1,0 +1,87 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Organizer!</title>
+  {% include "bootstrap.html" %}
+	{% load static %}
+	<script src="{%static 'common.js' %}" /></script>
+  
+  <link rel="stylesheet" href="{%static 'common.css' %}" />
+</head>
+<body>
+  {% include "navbar.html" %}
+	<div style="background-color: transparent; color: blanchedalmond;" class="jumbotron">
+	  <h1>Budget Entries</h1>
+	  {% if not table_data %}
+	  	<p>There are no journal entries to display.</p>
+	  {% else %}
+			<table class="table table-striped" border="1">
+	    <tr style="color: blanchedalmond !important;">
+	      <th>Description</th>
+          <th>Category</th>
+          <th>Projected</th>
+          <th>Actual</th>
+          <th>Action</th>
+				
+	    </tr>
+	    {% for row in table_data %}
+	      <tr name="rows" style="color: blanchedalmond !important;">
+	      <td>{{ row.description }}</td>
+          <td>{{ row.category }}</td>
+          <td>{{ row.projected }}</td>
+          <td>{{ row.actual }}</td>
+	      <td>
+	        	<a class="btn btn-primary" href="{% url 'organizer:budgetEdit' %}/{{ row.id }}">Edit</a>
+	        	<a class="btn btn-primary" href="#" onclick="confirmDeleteModal({{ row.id }})">Delete</a>
+			</td>
+				</tr><int:id></int:id>
+	    {% endfor %}
+		  </table>
+		{% endif %}
+	  <form method="GET" action="{% url 'organizer:budgetAdd' %}">
+	    <input type="submit" class="btn btn-primary" value = "Add Budget Entry">
+	  </form>
+      <p id="total" style="color: red; size: 16vh;"></p>
+	</div>
+    <script>
+        function totalBudget(){
+            let rows = document.getElementsByName("rows");
+            let projected = 0;
+            let actual = 0;
+            for(let i =0; i < rows.length; i++){
+                projected = projected + parseInt(rows[i].children[2].innerText);
+                actual = actual + parseInt(rows[i].children[3].innerText);
+            }
+            return (projected-actual);
+        }
+        //let report = document.getElementById("total");
+        if(totalBudget() >= 0){
+            total.style = "color: blanchedalmond; size: 18vh;";
+        }
+        else{
+            total.style = "color: red; size: 18vh;";
+        }
+        total.innerText = "Your current balance(projected - actual) is: " + totalBudget();
+    </script>
+
+  <!-- Modal -->
+  <div id="deleteModal" class="modal fade" role='dialog'>
+    <div class="modal-dialog" >
+      <div class="modal-content" style="background-color: darkslategrey !important;">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+          <h4 class="modal-title">Delete Journal Entry</h4>
+        </div>
+        <div class="modal-body">
+          <p>Do you really want to delete this Journal Entry?</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+          <span id= 'deleteButton'></span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--Modal ends here--->
+</body>
+</html>

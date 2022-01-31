@@ -1,0 +1,26 @@
+<head>
+    {% load static %}
+    <link rel="stylesheet" href="{%static 'common.css' %}" />
+    {% include "bootstrap.html" %}
+
+</head>
+
+<body>
+    {% include "navbar.html" %}
+
+    <div class="container">
+        <div style="background-color: transparent; color: blanchedalmond;" class="jumbotron">
+            <h1>Login</h1>
+            <form action="{% url 'organizer:login' %}" method="POST">{% csrf_token %}
+                <table>{{ login_form.as_table }}
+                    <tr>
+                        <td><input type="submit" class="btn btn-primary" value="Login" /></td>
+                    </tr>
+                    <tr>
+                        <td>Click <a href="{% url 'organizer:join' %}">here</a> to join.</td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>
+</body>

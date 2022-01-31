@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <title>Edit Journal Entry</title>
+  {% include "bootstrap.html" %}
+  {% load static %}
+  <link rel="stylesheet" href="{%static 'common.css' %}" />
+</head>
+<body>
+  {% include "navbar.html" %}
+  <div style="background-color: transparent; color: blanchedalmond;" class="jumbotron">
+    <h1>Edit Task Entry</h1>
+    <form method="POST">
+      {% csrf_token %}
+      <table>
+        {{ form_data.as_table }}
+				<tr>
+					<td></td>
+					<td>
+						<a href="{% url 'organizer:tasks' %}" class="btn btn-secondary">Cancel</a>
+						<input type="submit" class="btn btn-primary" name="edit" value = "Save">
+					</td>
+				</td></tr>
+			</table>
+    </form>
+  </div>
+</body>
+</html>
